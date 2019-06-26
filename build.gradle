@@ -2,10 +2,15 @@ plugins {
     id 'java'
 }
 
+apply plugin: 'java'
+apply plugin: 'application'
+
 group 'net.ruixinglong.java-slice-upload'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+
+mainClassName = 'net.ruixinglong.jsu.HelloGradle'
 
 repositories {
     mavenCentral()
