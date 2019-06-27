@@ -1,10 +1,6 @@
 package net.ruixinglong.jsu;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.stream.Stream;
+import java.io.*;
 
 public class Storage {
 
@@ -19,7 +15,7 @@ public class Storage {
     protected int chunks = 0;
     protected String dir;
     protected String tempDir;
-    protected Stream stream;
+    protected InputStream stream;
 
     Storage(String directory) {
         this.dir = directory;
@@ -50,7 +46,7 @@ public class Storage {
         return this;
     }
 
-    public Storage setStream(Stream stream) {
+    public Storage setStream(InputStream stream) {
         this.stream = stream;
         return this;
     }
@@ -58,8 +54,15 @@ public class Storage {
     public String save() throws IOException {
         String fileName = this.dir + File.separator + this.key;
         String sliceFileName = this.getSliceFileName(fileName, this.chunk);
-        File file = new File(sliceFileName);
-        Writer writer = new FileWriter(file);
+        FileOutputStream fos = new FileOutputStream(sliceFileName);
+
+        byte[] b = new byte[1024];
+        int length;
+        while ((length = this.stream.read(b)) > 0) {
+            fos.write(b, 0, length);
+        }
+
+        fos.close();
 //        writer.write(this.stream);
         return "";
     }
