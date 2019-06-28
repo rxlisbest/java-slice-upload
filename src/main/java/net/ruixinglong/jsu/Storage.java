@@ -54,7 +54,12 @@ public class Storage {
     }
 
     public String save() {
-        String fileName = this.dir + File.separator + this.key;
+        String fileName = "";
+        if (this.dir.lastIndexOf(File.separator.toString()) == this.dir.length() - 1) {
+            fileName = this.dir + this.key;
+        } else {
+            fileName = this.dir + File.separator + this.key;
+        }
         String sliceFileName = this.getSliceFileName(fileName, this.chunk);
 
         try {
@@ -110,6 +115,7 @@ public class Storage {
                         while ((length = fileInputStreamI.read(b)) > 0) {
                             fos.write(b, 0, length);
                         }
+                        fileI.delete();
                     }
                     fos.flush();
                     fos.close();
@@ -126,7 +132,13 @@ public class Storage {
     }
 
     protected String getLockFileName() {
-        return String.format("%s/%s.lock", this.tempDir, this.key);
+        String tempDir = "";
+        if (this.tempDir.lastIndexOf(File.separator.toString()) == this.tempDir.length() - 1) {
+            tempDir = this.tempDir;
+        } else {
+            tempDir = this.tempDir + File.separator;
+        }
+        return String.format("%s%s.lock", tempDir, this.key);
     }
 
     protected String getSliceFileName(String fileName, int chunk) {
