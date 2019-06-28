@@ -14,7 +14,7 @@ public class Storage {
     protected String key;
     protected String name;
     protected int chunk = 0;
-    protected int chunks = 0;
+    protected int chunks = 1;
     protected String dir;
     protected String tempDir;
     protected InputStream stream;
@@ -75,7 +75,7 @@ public class Storage {
             }
         }
 
-        Boolean isMerge = false;
+        Boolean isMerge = true;
         for (int i = 0; i < this.chunks; i++) {
             String sliceFileNameI = this.getSliceFileName(fileName, i);
             File fileI = new File(sliceFileNameI);
@@ -87,6 +87,8 @@ public class Storage {
 
         if (isMerge) {
             String lockFileName = this.getLockFileName();
+            System.out.println(lockFileName);
+
             File lockFile = new File(lockFileName);
             try {
                 if (!lockFile.exists()) {
@@ -96,14 +98,22 @@ public class Storage {
                 FileChannel fileChannel = randomAccessFile.getChannel();
                 FileLock fileLock = fileChannel.tryLock();
                 if (fileLock != null) {
+                    System.out.println(fileName);
+                    FileOutputStream fos = new FileOutputStream(fileName);
                     for (int i = 0; i < this.chunks; i++) {
                         String sliceFileNameI = this.getSliceFileName(fileName, i);
                         File fileI = new File(sliceFileNameI);
-                        if (!fileI.exists()) {
-                            isMerge = false;
-                            break;
+                        FileInputStream fileInputStreamI = new FileInputStream(fileI);
+
+                        byte[] b = new byte[1024];
+                        int length;
+                        while ((length = fileInputStreamI.read(b)) > 0) {
+                            fos.write(b, 0, length);
                         }
                     }
+                    fos.flush();
+                    fos.close();
+                    fileLock.release();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

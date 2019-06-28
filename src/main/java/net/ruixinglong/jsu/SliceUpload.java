@@ -14,6 +14,7 @@ public class SliceUpload {
 
     public String save() throws IOException {
         InputStream f = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
-        return this.upload.setKey("test.jpg").setName("test.jpg").setStream(f).save();
+        String tempDir = System.getProperty("java.io.tmpdir");
+        return this.upload.setKey("test.jpg").setTempDir(tempDir).setName("test.jpg").setStream(f).save();
     }
 }
