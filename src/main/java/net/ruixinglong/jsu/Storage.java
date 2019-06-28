@@ -1,6 +1,8 @@
 package net.ruixinglong.jsu;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 public class Storage {
 
@@ -51,18 +53,64 @@ public class Storage {
         return this;
     }
 
-    public String save() throws IOException {
+    public String save() {
         String fileName = this.dir + File.separator + this.key;
         String sliceFileName = this.getSliceFileName(fileName, this.chunk);
-        FileOutputStream fos = new FileOutputStream(sliceFileName);
 
-        byte[] b = new byte[1024];
-        int length;
-        while ((length = this.stream.read(b)) > 0) {
-            fos.write(b, 0, length);
+        try {
+            FileOutputStream fos = new FileOutputStream(sliceFileName);
+
+            byte[] b = new byte[1024];
+            int length;
+            while ((length = this.stream.read(b)) > 0) {
+                fos.write(b, 0, length);
+            }
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            if (this.chunks > 1) {
+                return this.STATUS_FAILURE;
+            } else {
+                return this.STATUS_SLICE_FAILURE;
+            }
         }
 
-        fos.close();
+        Boolean isMerge = false;
+        for (int i = 0; i < this.chunks; i++) {
+            String sliceFileNameI = this.getSliceFileName(fileName, i);
+            File fileI = new File(sliceFileNameI);
+            if (!fileI.exists()) {
+                isMerge = false;
+                break;
+            }
+        }
+
+        if (isMerge) {
+            String lockFileName = this.getLockFileName();
+            File lockFile = new File(lockFileName);
+            try {
+                if (!lockFile.exists()) {
+                    lockFile.createNewFile();
+                }
+                RandomAccessFile randomAccessFile = new RandomAccessFile(lockFile, "rw");
+                FileChannel fileChannel = randomAccessFile.getChannel();
+                FileLock fileLock = fileChannel.tryLock();
+                if (fileLock != null) {
+                    for (int i = 0; i < this.chunks; i++) {
+                        String sliceFileNameI = this.getSliceFileName(fileName, i);
+                        File fileI = new File(sliceFileNameI);
+                        if (!fileI.exists()) {
+                            isMerge = false;
+                            break;
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 遍历检查分片是否全部上传
 //        writer.write(this.stream);
         return "";
     }
