@@ -121,14 +121,20 @@ public class Storage {
                     fos.close();
                     fileLock.release();
                 }
+                return this.STATUS_SUCCESS;
             } catch (IOException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
+                return this.STATUS_FAILURE;
             }
         }
 
         // 遍历检查分片是否全部上传
 //        writer.write(this.stream);
-        return "";
+        if (this.chunks > 1) {
+            return this.STATUS_SLICE_SUCCESS;
+        } else {
+            return this.STATUS_SUCCESS;
+        }
     }
 
     protected String getLockFileName() {
