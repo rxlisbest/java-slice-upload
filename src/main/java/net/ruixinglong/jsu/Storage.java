@@ -80,6 +80,7 @@ public class Storage {
             }
         }
 
+        // 遍历检查分片是否全部上传
         Boolean isMerge = true;
         for (int i = 0; i < this.chunks; i++) {
             String sliceFileNameI = this.getSliceFileName(fileName, i);
@@ -128,7 +129,6 @@ public class Storage {
             }
         }
 
-        // 遍历检查分片是否全部上传
 //        writer.write(this.stream);
         if (this.chunks > 1) {
             return this.STATUS_SLICE_SUCCESS;
