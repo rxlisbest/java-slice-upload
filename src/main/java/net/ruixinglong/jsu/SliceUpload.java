@@ -1,6 +1,5 @@
 package net.ruixinglong.jsu;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
