@@ -20,11 +20,37 @@ public class WebUploaderRequest {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
         this.request = request;
-        this.setKey().setName().setChunk().setChunks().setTempDir().setStream();
+        this.setKey(null).setName().setChunk().setChunks().setTempDir().setStream();
     }
 
-    public WebUploaderRequest setKey() {
-        this.key = request.getParameter("key");
+    public String getKey() {
+        return this.key;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getChunk() {
+        return this.chunk;
+    }
+
+    public int getChunks() {
+        return this.chunks;
+    }
+
+    public String getTempDir() {
+        return this.tempDir;
+    }
+
+    public InputStream getStream() {
+        return this.stream;
+    }
+
+    public WebUploaderRequest setKey(String key) {
+        if (key != null) {
+            this.key = request.getParameter("key");
+        }
         return this;
     }
 
