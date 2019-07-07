@@ -22,7 +22,8 @@ public class SliceUpload {
             System.out.println(request);
             InputStream f = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
             String tempDir = System.getProperty("java.io.tmpdir");
-            return this.upload.setKey("test.jpg").setTempDir(tempDir).setName("test.jpg").setStream(f).save();
+            WebUploaderRequest webUploaderRequest = new WebUploaderRequest();
+            return this.upload.setKey(webUploaderRequest.getKey()).setTempDir(webUploaderRequest.getTempDir()).setName(webUploaderRequest.getName()).setStream(webUploaderRequest.getStream()).save();
         } catch (Exception e) {
             return "";
         }

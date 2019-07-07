@@ -11,6 +11,7 @@ public class SliceUploadController {
     @RequestMapping("/slice-upload")
     public String index(HttpServletRequest request) {
         System.out.println(request.getRequestURI());
+        System.out.println(request.getParameter("name"));
         SliceUpload sliceUpload = new SliceUpload("/Users/apple/Pictures/test/");
         sliceUpload.save();
         return "Hello World";

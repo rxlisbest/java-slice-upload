@@ -4,6 +4,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.io.InputStream;
 
 public class WebUploaderRequest {
@@ -80,7 +81,12 @@ public class WebUploaderRequest {
     }
 
     public WebUploaderRequest setStream() {
-        this.stream = null;
+        try {
+            Part file = request.getPart("file");
+            this.stream = file.getInputStream();
+        } catch (Exception e) {
+
+        }
         return this;
     }
 }

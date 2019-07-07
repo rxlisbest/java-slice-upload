@@ -4,11 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.io.FileInputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,7 +30,9 @@ public class SliceUploadTest {
 
     @Test
     public void testSave() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/slice-upload").accept(MediaType.APPLICATION_JSON))
+        FileInputStream fis = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
+        MockMultipartFile firstFile = new MockMultipartFile("file", "php.jpg", "image/jpeg", fis);
+        mvc.perform(MockMvcRequestBuilders.fileUpload("/slice-upload").file(firstFile).contentType(MediaType.MULTIPART_FORM_DATA).param("name","test.jpg").param("name","test1.jpg"))
             .andExpect(content().string(equalTo("Hello World")));
     }
 }
