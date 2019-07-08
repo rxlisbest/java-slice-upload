@@ -2,6 +2,8 @@ package net.ruixinglong.jsu;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
@@ -49,7 +51,7 @@ public class WebUploaderRequest {
     }
 
     public WebUploaderRequest setKey(String key) {
-        if (key != null) {
+        if (key == null) {
             this.key = request.getParameter("key");
         }
         return this;
@@ -82,8 +84,12 @@ public class WebUploaderRequest {
 
     public WebUploaderRequest setStream() {
         try {
-            Part file = request.getPart("file");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            MultipartFile file = multipartRequest.getFile("file");
+            System.out.println(6);
+            System.out.println(file);
             this.stream = file.getInputStream();
+            System.out.println(this.stream);
         } catch (Exception e) {
 
         }
