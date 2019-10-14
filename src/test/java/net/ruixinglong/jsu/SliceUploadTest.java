@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -32,7 +31,7 @@ public class SliceUploadTest {
     public void testSave() throws Exception {
         FileInputStream fis = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
         MockMultipartFile firstFile = new MockMultipartFile("file", "php.jpg", "image/jpeg", fis);
-        mvc.perform(MockMvcRequestBuilders.fileUpload("/slice-upload").file(firstFile).contentType(MediaType.MULTIPART_FORM_DATA).param("name","test.jpg").param("key","test1.jpg"))
+        mvc.perform(MockMvcRequestBuilders.multipart("/slice-upload").file(firstFile).contentType(MediaType.MULTIPART_FORM_DATA).param("name","test.jpg").param("key","test2.jpg"))
             .andExpect(content().string(equalTo("Hello World")));
     }
 }

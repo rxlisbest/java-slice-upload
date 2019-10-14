@@ -12,7 +12,7 @@ public class SliceUploadController {
     public String index(HttpServletRequest request) {
         System.out.println(request.getRequestURI());
         System.out.println(request.getParameter("name"));
-        SliceUpload sliceUpload = new SliceUpload("/Users/apple/Downloads/test2/");
+        SliceUpload sliceUpload = new SliceUpload("/Users/apple/Downloads/test1/");
         sliceUpload.save();
         return "Hello World";
     }

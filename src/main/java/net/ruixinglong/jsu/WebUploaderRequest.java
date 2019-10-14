@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.InputStream;
 
 public class WebUploaderRequest {
