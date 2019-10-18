@@ -2,13 +2,11 @@ package net.ruixinglong.jsu;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 
-public class WebUploaderRequest implements RequestInterface {
+public class QiniuRequest implements RequestInterface {
 
     protected HttpServletRequest request;
 
@@ -24,7 +22,7 @@ public class WebUploaderRequest implements RequestInterface {
 
     protected InputStream stream;
 
-    WebUploaderRequest() {
+    QiniuRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
         this.request = request;
@@ -55,43 +53,41 @@ public class WebUploaderRequest implements RequestInterface {
         return this.stream;
     }
 
-    public WebUploaderRequest setKey(String key) {
+    public QiniuRequest setKey(String key) {
         if (key == null) {
             this.key = request.getParameter("key");
         }
         return this;
     }
 
-    public WebUploaderRequest setName() {
+    public QiniuRequest setName() {
         this.name = request.getParameter("name");
         return this;
     }
 
-    public WebUploaderRequest setChunk() {
+    public QiniuRequest setChunk() {
         if (request.getParameter("chunk") != null) {
             this.chunk = Integer.parseInt(request.getParameter("chunk"));
         }
         return this;
     }
 
-    public WebUploaderRequest setChunks() {
+    public QiniuRequest setChunks() {
         if (request.getParameter("chunks") != null) {
             this.chunks = Integer.parseInt(request.getParameter("chunks"));
         }
         return this;
     }
 
-    public WebUploaderRequest setTempDir() {
+    public QiniuRequest setTempDir() {
         String tempDir = System.getProperty("java.io.tmpdir");
         this.tempDir = tempDir;
         return this;
     }
 
-    public WebUploaderRequest setStream() {
+    public QiniuRequest setStream() {
         try {
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            MultipartFile file = multipartRequest.getFile("file");
-            this.stream = file.getInputStream();
+            this.stream = request.getInputStream();
         } catch (Exception e) {
 
         }
