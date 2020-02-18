@@ -28,18 +28,18 @@ public class SliceUploadTest {
     }
 
     @Test
-    public void testSaveWebUploader() throws Exception {
+    public void testSave() throws Exception {
         FileInputStream fis = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
         MockMultipartFile firstFile = new MockMultipartFile("file", "php.jpg", "image/jpeg", fis);
         mvc.perform(MockMvcRequestBuilders.multipart("/slice-upload").file(firstFile).contentType(MediaType.MULTIPART_FORM_DATA).param("name","test.jpg").param("key","test2.jpg"))
             .andExpect(content().string(equalTo("Hello World")));
     }
-
-    @Test
-    public void testSaveQiniu() throws Exception {
-        FileInputStream fis = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
-        MockMultipartFile firstFile = new MockMultipartFile("file", "php.jpg", "image/jpeg", fis);
-        mvc.perform(MockMvcRequestBuilders.post("/slice-upload", firstFile).contentType(MediaType.APPLICATION_OCTET_STREAM).param("name","test.jpg").param("key","test3.jpg"))
-                .andExpect(content().string(equalTo("Hello World")));
-    }
+//
+//    @Test
+//    public void testSaveQiniu() throws Exception {
+//        FileInputStream fis = new FileInputStream("/Users/apple/Pictures/test/php.jpg");
+//        MockMultipartFile firstFile = new MockMultipartFile("file", "php.jpg", "image/jpeg", fis);
+//        mvc.perform(MockMvcRequestBuilders.post("/slice-upload", firstFile).contentType(MediaType.APPLICATION_OCTET_STREAM).param("name","test.jpg").param("key","test3.jpg"))
+//                .andExpect(content().string(equalTo("Hello World")));
+//    }
 }
